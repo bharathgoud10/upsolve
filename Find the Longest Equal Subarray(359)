@@ -1,0 +1,22 @@
+Input: nums = [1,3,2,3,1,3], k = 3
+Output: 3
+Explanation: It's optimal to delete the elements at index 2 and index 4.
+After deleting them, nums becomes equal to [1, 3, 3, 3].
+The longest equal subarray starts at i = 1 and ends at j = 3 with length equal to 3.
+It can be proven that no longer equal subarrays can be created. sliding window
+class Solution {
+    public int longestEqualSubarray(List<Integer> nums, int k) {
+        int arr[]=new int[100001];
+        int j=0;int n=nums.size();
+        int maxCnt=0;
+        for(int i=0;i<n;i++){
+           arr[nums.get(i)]++;
+           maxCnt=Math.max(maxCnt,arr[nums.get(i)]);
+           if(i-j+1 - maxCnt>k){
+               arr[nums.get(j)]--;
+               j++;
+           }
+        }
+        return maxCnt;
+    }
+}
