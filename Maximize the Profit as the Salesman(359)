@@ -1,0 +1,43 @@
+Input: n = 5, offers = [[0,0,1],[0,2,2],[1,3,2]]
+Output: 3
+Explanation: There are 5 houses numbered from 0 to 4 and there are 3 purchase offers.
+We sell houses in the range [0,0] to 1st buyer for 1 gold and houses in the range [1,3] to 3rd buyer for 2 golds.
+It can be proven that 3 is the maximum amount of gold we can achieve.
+class Solution {
+    int find(List<List<Integer>> ls,int x){
+        int si=0;
+        int ei=ls.size()-1;
+        int ans=-1;
+        while(si<=ei){
+            int mid=(ei+si)/2;
+            if(ls.get(mid).get(0)>x){
+                ans=mid;
+                ei=mid-1;
+            }
+            else
+                si=mid+1;
+        }
+        return si;
+    }
+    int f(int i,List<List<Integer>> ls,int dp[]){
+        if(i>=ls.size())
+            return 0;
+        if(dp[i]!=0)return dp[i];
+        int next_idx=find(ls,ls.get(i).get(1));
+        int take=ls.get(i).get(2)+f(next_idx,ls,dp);
+        int not= f(i+1,ls,dp);
+        return dp[i]=Math.max(take,not);
+    }
+    public int maximizeTheProfit(int n, List<List<Integer>> ls) {
+        Collections.sort(ls,(a,b)->{
+            // if(a.get(0)==b.get(0)){
+            //     return a.get(1)-b.get(1);
+            // }
+            return a.get(0)-b.get(0);
+        });
+        int len=ls.size();
+        int dp[]=new int[len];
+        // Arrays.fill(dp,-1);
+        return f(0,ls,dp);
+    }
+}
