@@ -1,0 +1,26 @@
+Find the minimum absolute difference between two elements in the array that are at least x indices apart.
+
+In other words, find two indices i and j such that abs(i - j) >= x and abs(nums[i] - nums[j]) is minimized.
+
+Return an integer denoting the minimum absolute difference between two elements that are at least x indices apart.
+
+Input: nums = [5,3,2,10,15], x = 1
+Output: 1
+Explanation: We can select nums[1] = 3 and nums[2] = 2.
+They are at least 1 index apart, and their absolute difference is the minimum, 1.
+It can be shown that 1 is the optimal answer.
+
+class Solution {
+    public int minAbsoluteDifference(List<Integer> nums, int x) {
+        int mini=Integer.MAX_VALUE;
+        int n=nums.size();
+        TreeSet<Integer> set=new TreeSet<>();
+        for(int i=x;i<n;i++){
+            set.add(nums.get(i-x));
+            Integer t1=set.ceiling(nums.get(i)),t2=set.floor(nums.get(i));
+            if(t1!=null)mini=Math.min(mini,Math.abs(t1-nums.get(i)));
+            if(t2!=null)mini=Math.min(mini,Math.abs(t2-nums.get(i)));
+        }
+        return mini;
+    }
+}
