@@ -1,0 +1,40 @@
+You are given a 0-indexed array nums containing n integers.
+
+At each second, you perform the following operation on the array:
+
+For every index i in the range [0, n - 1], replace nums[i] with either nums[i], nums[(i - 1 + n) % n], or nums[(i + 1) % n].
+Note that all the elements get replaced simultaneously.
+
+Return the minimum number of seconds needed to make all elements in the array nums equal.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,1,2]
+Output: 1
+Explanation: We can equalize the array in 1 second in the following way:
+- At 1st second, replace values at each index with [nums[3],nums[1],nums[3],nums[3]]. After replacement, nums = [2,2,2,2].
+It can be proven that 1 second is the minimum amount of seconds needed for equalizing the array.
+
+class Solution {
+    public int minimumSeconds(List<Integer> nums) {
+        HashMap<Integer,ArrayList<Integer>> hm=new HashMap<>();
+        for(int i=0;i<nums.size();i++){
+            int x=nums.get(i);
+            if(!hm.containsKey(x))
+            hm.put(x,new ArrayList<>());
+            hm.get(x).add(i);
+        }
+        int res=Integer.MAX_VALUE;
+        for(var i:hm.values()){
+            i.add(i.get(0)+nums.size());//to consider dist between 1st & last ele
+            int maxi=0;
+            for(int j=0;j<i.size()-1;j++){
+               maxi=Math.max(maxi,i.get(j+1)-i.get(j));
+            }
+            res=Math.min(maxi/2,res);
+        }
+        return res;
+    }
+}
