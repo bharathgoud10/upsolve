@@ -1,0 +1,41 @@
+Given three strings a, b, and c, your task is to find a string that has the minimum length and contains all three strings as substrings.
+If there are multiple such strings, return the lexicographically smallest one.
+
+Return a string denoting the answer to the problem.
+
+Example 1:
+
+Input: a = "abc", b = "bca", c = "aaa"
+Output: "aaabca"
+Explanation:  We show that "aaabca" contains all the given strings: a = ans[2...4], b = ans[3..5], c = ans[0..2]. It can be shown that the length of the resulting string would be at least 6 and "aaabca" is the lexicographically smallest one.
+
+class Solution {
+    String solve(String a,String b){
+        if(a.contains(b))
+        return a;
+        for(int i=0;i<a.length();i++){
+            String s1=a.substring(i);
+            if(b.length()<s1.length())
+            continue;
+            String s2=b.substring(0,s1.length());
+            if(s1.equals(s2))
+            return a+b.substring(s1.length());
+        }
+        return a+b;
+    }
+    String f(String a,String b,String c){
+        String x=solve(a,b);
+        return getMin(solve(x,c),solve(c,x));
+    }
+    String getMin(String a,String b){
+        if((a.length()<b.length())||(a.length()==b.length() && a.compareTo(b)<0))
+        return a;
+        return b;
+    }
+    public String minimumString(String a, String b, String c) {
+        String x=getMin(f(a,b,c),f(a,c,b));
+        String y=getMin(f(b,a,c),f(b,c,a));
+        String z=getMin(f(c,a,b),f(c,b,a));
+        return getMin(x,getMin(y,z));
+    }
+}
